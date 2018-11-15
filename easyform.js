@@ -1,15 +1,12 @@
 
-$(function()
-{
+$(function () {
 
     // class | constructor
-    Easyform = function()
-    {
+    Easyform = function () {
         this.dataClassName = 'easyform';
     };
 
-    getEasyform = function()
-    {
+    getEasyform = function () {
         return new Easyform;
     }
 
@@ -30,123 +27,97 @@ $(function()
     *@param isValueCustomized 値の取得先属性がdata属性の場合、true（default:false)
     *
     */
-    Easyform.prototype.getFormValues = function(formId, nameAttr='name', valueAttr='value', isNameCustomized=false, isValueCustomized=false)
-    {
-        try
-        {
+    Easyform.prototype.getFormValues = function (formId, nameAttr = 'name', valueAttr = 'value', isNameCustomized = false, isValueCustomized = false) {
+        try {
             return this._getFormValues(formId, nameAttr, valueAttr, isNameCustomized, isValueCustomized);
         }
-        catch (e)
-        {
+        catch (e) {
             alert("Error was occured from Easyform");
         }
     }
 
-    Easyform.prototype._getFormValues = function(formId, nameAttr='name', valueAttr='value', isNameCustomized=null, isValueCustomized=null)
-    {
+    Easyform.prototype._getFormValues = function (formId, nameAttr = 'name', valueAttr = 'value', isNameCustomized = null, isValueCustomized = null) {
         var returnArray = {};
         var form = $('form#test-form');
-        var formName = 'form#'+formId;
+        var formName = 'form#' + formId;
 
         className = this.dataClassName;
 
         // getVal
         // dataAttr
-        if(isValueCustomized == true)
-        {
-            var getVal = function(target)
-            {
+        if (isValueCustomized == true) {
+            var getVal = function (target) {
                 return $(target).data(valueAttr);
             }
         }
         // value
-        else if(valueAttr == 'value')
-        {
-            var getVal = function(target)
-            {
+        else if (valueAttr == 'value') {
+            var getVal = function (target) {
                 return $(target).val();
             }
         }
         // others (Error)
-        else
-        {
+        else {
             throw Exception;
         }
 
         // getName
         // dataAttr
-        if(isNameCustomized == true)
-        {
-            var getName = function(target)
-            {
+        if (isNameCustomized == true) {
+            var getName = function (target) {
                 return $(target).data(nameAttr);
             }
         }
         // value
-        else if(nameAttr == 'name')
-        {
-            var getName = function(target)
-            {
+        else if (nameAttr == 'name') {
+            var getName = function (target) {
                 return $(target).attr('name');
             }
         }
         // value
-        else if(nameAttr == 'id')
-        {
-            var getName = function(target)
-            {
+        else if (nameAttr == 'id') {
+            var getName = function (target) {
                 return $(target).attr('id');
             }
         }
         // others (Error)
-        else
-        {
+        else {
             throw Exception;
         }
 
-        $(formName + " input").each(function()
-        {
-            if ($(this).hasClass(className))
-            {
+        $(formName + " input").each(function () {
+            if ($(this).hasClass(className)) {
                 // case radio
-                if($(this).is(':radio'))
-                {
-                    if($(this).is(':checked'))
-                    {
+                if ($(this).is(':radio')) {
+                    if ($(this).is(':checked')) {
                         returnArray[getName(this)] = getVal(this);
                     }
                 }
                 // case checkbox
-                else if($(this).is(':checkbox'))
-                {
-                    if($(this).is(':checked')) {
+                else if ($(this).is(':checkbox')) {
+                    if ($(this).is(':checked')) {
                         returnArray[getName(this)] = 'true';
                     } else {
                         returnArray[getName(this)] = 'false';
                     }
                 }
                 // others (mainly this is for text)
-                else
-                {
+                else {
                     returnArray[getName(this)] = getVal(this);
                 }
             }
         });
 
         // case select
-        $(formName + " select").each(function()
-        {
-            if ($(this).hasClass(className))
-            {
+        $(formName + " select").each(function () {
+            if ($(this).hasClass(className)) {
                 returnArray[getName(this)] = getVal(this);
             }
         });
 
         // case textarea
-        $(formName + " textarea").each(function()
-        {
-            if ($(this).hasClass(className))
-            {
+        $(formName + " textarea").each(function () {
+            if ($(this).hasClass(className)) {
                 returnArray[getName(this)] = getVal(this);
             }
         });
